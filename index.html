@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drag and Drop Example</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .box {
+    width: 200px;
+    height: 200px;
+    border: 2px dashed #ccc;
+    position: relative;
+    margin: 0 50px;
+  }
+
+  #left-box {
+    float: left;
+  }
+
+  #right-box {
+    float: right;
+  }
+
+  .ball {
+    width: 50px;
+    height: 50px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+    cursor: move;
+  }
+
+  #ball-counter {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+</style>
+</head>
+<body>
+
+<div id="left-box" class="box" ondrop="drop(event)" ondragover="allowDrop(event)">
+  <div class="ball" id="ball1" draggable="true" ondragstart="drag(event)"></div>
+  <div class="ball" id="ball2" draggable="true" ondragstart="drag(event)"></div>
+  <div class="ball" id="ball3" draggable="true" ondragstart="drag(event)"></div>
+  <div class="ball" id="ball4" draggable="true" ondragstart="drag(event)"></div>
+</div>
+
+<div id="right-box" class="box" ondrop="drop(event)" ondragover="allowDrop(event)">
+  <div id="ball-counter">0 balls</div>
+</div>
+
+<script>
+  const balls = document.querySelectorAll('.ball');
+  const leftBox = document.getElementById('left-box');
+  const rightBox = document.getElementById('right-box');
+  const ballCounter = document.getElementById('ball-counter');
+
+  let ballsInRightBox = 0;
+
+  // Add event listeners for each ball
+  balls.forEach(ball => {
+    ball.addEventListener('dragstart', drag);
+  });
+
+  // Function to handle drag start event
+  function drag(e) {
+    e.dataTransfer.setData('text/plain', e.target.id);
+    const offsetX = e.clientX - e.target.getBoundingClientRect().left;
+    const offsetY = e.clientY - e.target.getBoundingClientRect().top;
+    e.dataTransfer.setDragImage(e.target, offsetX, offsetY);
+  }
+
+  // Function to handle allow drop event
+  function allowDrop(e) {
+    e.preventDefault();
+  }
+
+  // Function to handle drop event
+  function drop(e) {
+    e.preventDefault();
+    if (e.target.id === 'right-box') {
+      if (ballsInRightBox < 2) {
+        const ballId = e.dataTransfer.getData('text/plain');
+        const ball = document.getElementById(ballId);
+        const x = e.clientX - rightBox.getBoundingClientRect().left - ball.offsetWidth / 2;
+        const y = e.clientY - rightBox.getBoundingClientRect().top - ball.offsetHeight / 2;
+        ball.style.left = x + 'px';
+        ball.style.top = y + 'px';
+        rightBox.appendChild(ball);
+        ballsInRightBox++;
+        updateBallCounter();
+      } else {
+        playAlertSound(); // Play alert sound when the limit is reached
+      }
+    }
+  }
+
+  // Function to update ball counter
+  function updateBallCounter() {
+    ballCounter.textContent = ballsInRightBox + ' ball' + (ballsInRightBox !== 1 ? 's' : '');
+  }
+
+  // Function to play alert sound
+  function playAlertSound() {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const audioContext = new AudioContext();
+
+    // Create a simple beep sound
+    const oscillator = audioContext.createOscillator();
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(800, audioContext.currentTime); // Set frequency
+    oscillator.connect(audioContext.destination);
+    oscillator.start();
+
+    // Stop the oscillator after 0.1 second
+    setTimeout(() => {
+      oscillator.stop();
+    }, 100);
+  }
+</script>
+
+</body>
+</html>
+
+
+
