@@ -8,10 +8,7 @@
   body {
     font-family: Arial, sans-serif;
     height: 100vh;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin: 10px;
     overflow: hidden;
   }
 
@@ -50,15 +47,22 @@
 </head>
 <body>
 
-<div id="left-box" class="box" ondrop="drop(event)" ondragover="allowDrop(event)">
-  <div class="ball" id="ball1" draggable="true" ondragstart="drag(event)"></div>
-  <div class="ball" id="ball2" draggable="true" ondragstart="drag(event)"></div>
-  <div class="ball" id="ball3" draggable="true" ondragstart="drag(event)"></div>
-  <div class="ball" id="ball4" draggable="true" ondragstart="drag(event)"></div>
-</div>
+<h2>A simple drag and drop example</h2>
+<br>
+<p>Drag the balls to the right box. You can only drop a maximum of 2 balls in the right box.</p>
 
-<div id="right-box" class="box" ondrop="drop(event)" ondragover="allowDrop(event)">
-  <div id="ball-counter">0 balls</div>
+<div class="boxContainer" style="display: flex; justify-content: center; align-items: center; height: 100%; width: 100%;">
+  <div id="left-box" class="box" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <div class="ball" id="ball1" draggable="true" ondragstart="drag(event)"></div>
+    <div class="ball" id="ball2" draggable="true" ondragstart="drag(event)"></div>
+    <div class="ball" id="ball3" draggable="true" ondragstart="drag(event)"></div>
+    <div class="ball" id="ball4" draggable="true" ondragstart="drag(event)"></div>
+  </div>
+
+  <div id="right-box" class="box" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <div id="ball-counter">0 balls</div>
+  </div>
+
 </div>
 
 <script>
