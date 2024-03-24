@@ -49,7 +49,16 @@
 
 <h2>A simple drag and drop example</h2>
 <br>
-<p>Drag the balls to the right box. You can only drop a maximum of 2 balls in the right box.</p>
+<div style="display: flex;">
+  <p>Drag the balls to the right box. You can only drop a maximum of</p>
+  <select id="maxBalls" style="width: 90px; text-align: center; padding: 10px; margin: 0 10px;">
+    <option value="0" selected>Select</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+  </select>  <p>balls in the right box.</p>
+</div>
 
 <div class="boxContainer" style="display: flex; justify-content: center; align-items: center; height: 100%; width: 100%;">
   <div id="left-box" class="box" ondrop="drop(event)" ondragover="allowDrop(event)">
@@ -70,6 +79,7 @@
   const leftBox = document.getElementById('left-box');
   const rightBox = document.getElementById('right-box');
   const ballCounter = document.getElementById('ball-counter');
+  const maxBalls = document.getElementById('maxBalls');
 
   let ballsInRightBox = 0;
 
@@ -95,7 +105,7 @@
   function drop(e) {
     e.preventDefault();
     if (e.target.id === 'right-box') {
-      if (ballsInRightBox < 2) {
+      if (ballsInRightBox < maxBalls.value) {
         const ballId = e.dataTransfer.getData('text/plain');
         const ball = document.getElementById(ballId);
         const x = e.clientX - rightBox.getBoundingClientRect().left - ball.offsetWidth / 2;
